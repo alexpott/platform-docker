@@ -44,6 +44,7 @@ class DrushCommand extends DockerCommand
             '--root=' . Platform::webDir(),
             '--uri=' . Platform::getUri()
         ]);
+        $input->getOptions();
         foreach ($input->getArgument('cmd') as $argument) {
             $processBuilder->add($argument);
         }
