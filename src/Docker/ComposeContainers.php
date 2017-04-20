@@ -182,10 +182,20 @@ class ComposeContainers
               '8893',
               '8983',
           ],
-          'volumes' => [
-            './docker/conf/solr:/opt/solr/example/solr/collection1/conf',
-          ],
         ];
+
+        $solr_major_version = PlatformServiceConfig::getSolrMajorVersion();
+        if ($solr_major_version == 6) {
+          $this->config['solr']['volumes'] = [
+            './docker/conf/solr:/opt/solr/server/solr/mycores/conf',
+          ];
+        }
+        else {
+          $this->config['solr']['volumes'] = [
+            './docker/conf/solr:/opt/solr/example/solr/collection1/conf',
+          ];
+        }
+
         $this->config['phpfpm']['links'][] = 'solr';
         $this->config['nginx']['links'][] = 'solr';
     }
