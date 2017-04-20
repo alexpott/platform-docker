@@ -92,15 +92,13 @@ class Drupal extends StacksBase
                 throw new \Exception('Unsupported version of Drupal. Write a pull reuqest!');
         }
 
-        $web_container_name = Compose::getContainerName(Platform::projectName(), 'nginx');
-        $detect_port_command = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"80/tcp\") 0).HostPort}}' $web_container_name";
         $placeholders = [
           '{{ salt }}' => hash('sha256', serialize($_SERVER)),
           '{{ container_name }}' => $this->containerName,
+          '{{ web_container_name }}' => Compose::getContainerName(Platform::projectName(), 'nginx'),
           '{{ redis_container_name }}' => $this->redisContainerName,
           '{{ solr_container_name }}' => $this->solrContainerName,
           '{{ project_domain }}' => $this->projectName . '.' . $this->projectTld,
-          '{{ external_project_domain }}' => 'http://localhost/' . trim(shell_exec($detect_port_command)),
           '{{ mysql_user }}' => Mysql::getMysqlUser(),
           '{{ mysql_password }}' => Mysql::getMysqlPassword(),
           '{{ project_root }}' => Platform::rootDir(),
